@@ -1,11 +1,11 @@
 function coded = caesar(txt,shift)
-while shift > 95
+while shift >= 95
 shift = shift - 95;
 end
-while shift < -95
+while shift <= -95
 shift = shift + 95;
 end
-coded_num = double(txt) + shift
+coded_num = double(txt) + shift;
 for ii = 1:length(txt)
     if coded_num(ii) > 126
         coded_num(ii) = coded_num(ii) -127 + 32;
