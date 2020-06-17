@@ -1,6 +1,6 @@
 function indices = saddle(M)
-[m, ~] = size(M);
-indices = [0, 0];
+[m, n] = size(M);
+indices = zeros(m*n, 2); %Preallocate the indices(assuming all the numbers are the same in the matrix)
 %Finding the maximum in the row (might return more than one indexs)
 for ii = 1:m
     maxn_r = max(M(ii,:)); %maxinum of the row
@@ -10,11 +10,10 @@ for ii = 1:m
         minn_c = min(M(:,maxi_r(jj)));
         mini_c = find(M(:,maxi_r(jj)) == minn_c);
         if isequal(maxn_r, minn_c)
-            index = [mini_c, maxi_r];%part of the indices
+            indices(ii, maxi_r(jj)) = [mini_c, maxi_r];%part of the indices
         else
-            index = [0, 0];
+            indices(ii, maxi_r(jj)) = [0, 0];
         end
-        indices = indices + index;
     end
 end
         
