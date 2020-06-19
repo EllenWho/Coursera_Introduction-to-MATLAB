@@ -1,20 +1,28 @@
 function indices = saddle(M)
-[m, ~] = size(M);
-indices = [0, 0];
-%Finding the maximum in the row (might return more than one indexs)
-for ii = 1:m
-    maxn_r = max(M(ii,:)); %maxinum of the row
-    maxi_r = find(M(ii,:) == maxn_r); %indices of the maximum
-    l = length(maxi_r); %number of maximum in the maxi_r
-    for jj = 1:l
-        minn_c = min(M(:,maxi_r(jj)));
-        mini_c = find(M(:,maxi_r(jj)) == minn_c);
-        if isequal(maxn_r, minn_c)
-            index = [mini_c, maxi_r];%part of the indices
+[m, n] = size(M);
+temp = zeros(m*n, 2);
+for r = 1:m
+    for c = 1:n
+        if M(r,c) >= max(M(r,:)) && M(r,c) <= min(M(:,c))
+            temp((r-1)*n+c, :) = [r, c];
         else
-            index = [0, 0];
+            temp((r-1)*n+c, :) = [0,0];
         end
-        indices = indices + index;
+    end
+end
+if all(temp == 0)
+    indices = [];
+else
+    if all(temp ~= 0)
+        indices = temp;
+    else
+        v = nonzeros(temp');
+        row = length(v)/2;
+        if row == 1
+            indices = reshape(v,row,2);
+        else
+            indices = reshape(v,row,2)';
+        end
     end
 end
         
