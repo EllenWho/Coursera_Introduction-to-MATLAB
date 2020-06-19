@@ -1,29 +1,29 @@
 function indices = saddle(M)
 [m, n] = size(M);
-temp = zeros(m*n, 2); %Preallocate the indices(assuming all the numbers are the same in the matrix)
-%Finding the maximum in the row (might return more than one indexs)
-for ii = 1:m
-    maxn = max(M(ii,:)); %maxinum of the row
-    maxi = find(M(ii,:) == maxn); %indices of the maximum
-    l = length(maxi); %number of maximum in the maxi_r
-    for jj = 1:l
-        minn = min(M(:,maxi(jj)));
-        mini = find(M(:,maxi(jj)) == minn);
-        if isequal(maxn, minn)
-            for c = 1:length(maxi)
-                for r = 1:length(mini)
-                    temp((ii-1)*m + maxi(c), :) = [mini(r), maxi(c)];%part of the indices
-                end
-            end
+temp = zeros(m*n, 2);
+for r = 1:m
+    for c = 1:n
+        if M(r,c) >= max(M(r,:)) && M(r,c) <= min(M(:,c))
+            temp((r-1)*n+c, :) = [r, c];
+        else
+            temp((r-1)*n+c, :) = [0,0];
         end
     end
 end
-%delete the zeros in the matrix
 if all(temp == 0)
     indices = [];
 else
-    v = nonzeros(temp');
-    indices = reshape(v,2,2)';
+    if all(temp ~= 0)
+        indices = temp;
+    else
+        v = nonzeros(temp');
+        row = length(v)/2;
+        if row == 1
+            indices = reshape(v,row,2);
+        else
+            indices = reshape(v,row,2)';
+        end
+    end
 end
         
 
